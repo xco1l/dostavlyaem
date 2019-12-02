@@ -1,28 +1,28 @@
 {
-  "name": "dostavlyaem",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Saniyook/dostavlyaem.git"
-  },
-  "author": "Saniook",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Saniyook/dostavlyaem/issues"
-  },
-  "homepage": "https://github.com/Saniyook/dostavlyaem#readme",
-  "devDependencies": {
-    "prettier": "^1.19.1",
-    "tslint": "^5.20.1",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.2"
-  },
-  "dependencies": {
-    "loopback": "^3.26.0"
-  }
+    "name": "dostavlyaem",
+    "version": "1.0.0",
+    "description": "Practice app",
+    "main": "src/index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Saniyook/dostavlyaem.git"
+    },
+    "author": "Saniook",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Saniyook/dostavlyaem/issues"
+    },
+    "homepage": "https://github.com/Saniyook/dostavlyaem#readme",
+    "devDependencies": {
+        "prettier": "^1.19.1",
+        "tslint": "^5.20.1",
+        "tslint-config-prettier": "^1.18.0",
+        "typescript": "^3.7.2"
+    },
+    "dependencies": {
+        "loopback": "^3.26.0"
+    }
 }
