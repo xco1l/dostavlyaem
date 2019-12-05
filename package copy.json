@@ -1,7 +1,7 @@
 {
-  "name": "dostavlyaem",
+  "name": "test-app",
   "version": "1.0.0",
-  "description": "Delivery app",
+  "description": "Projects",
   "keywords": [
     "loopback-application",
     "loopback"
@@ -22,10 +22,11 @@
     "eslint": "lb-eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "pretest": "npm run clean && npm run build",
+    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
     "posttest": "npm run lint",
     "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
-    "docker:build": "docker build -t dostavlyaem .",
-    "docker:run": "docker run -p 3000:3000 -d dostavlyaem",
+    "docker:build": "docker build -t test-app .",
+    "docker:run": "docker run -p 3000:3000 -d test-app",
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
@@ -52,8 +53,7 @@
     "@loopback/repository": "^1.15.5",
     "@loopback/rest": "^1.24.0",
     "@loopback/rest-explorer": "^1.4.5",
-    "@loopback/service-proxy": "^1.3.12",
-    "loopback-connector-postgresql": "^3.8.0"
+    "@loopback/service-proxy": "^1.3.12"
   },
   "devDependencies": {
     "@loopback/build": "^2.1.0",
