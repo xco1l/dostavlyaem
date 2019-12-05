@@ -2,6 +2,10 @@ import {Model, model, property} from '@loopback/repository';
 
 @model()
 export class User extends Model {
+  constructor(data?: Partial<User>) {
+    super(data);
+  }
+
   @property({
     type: 'string',
     required: true,
@@ -43,11 +47,6 @@ export class User extends Model {
     type: 'string',
   })
   confirm_hash?: string;
-
-
-  constructor(data?: Partial<User>) {
-    super(data);
-  }
 }
 
 export interface UserRelations {
