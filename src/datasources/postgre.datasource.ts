@@ -5,7 +5,6 @@ import {
   ValueOrPromise,
 } from '@loopback/core';
 import {juggler} from '@loopback/repository';
-import * as config from './postgre.datasource.config.json';
 
 @lifeCycleObserver('datasource')
 export class PostgreDataSource extends juggler.DataSource
@@ -14,7 +13,7 @@ export class PostgreDataSource extends juggler.DataSource
 
   constructor(
     @inject('datasources.config.Postgre', {optional: true})
-    dsConfig: object = config,
+    dsConfig: object = {},
   ) {
     super(dsConfig);
   }
