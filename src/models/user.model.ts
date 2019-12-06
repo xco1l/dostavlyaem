@@ -1,7 +1,7 @@
-import {Model, model, property} from '@loopback/repository';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class User extends Model {
+export class User extends Entity {
   constructor(data?: Partial<User>) {
     super(data);
   }
@@ -38,10 +38,9 @@ export class User extends Model {
 
   @property({
     type: 'boolean',
-    required: true,
     default: false,
   })
-  confirmed: boolean;
+  confirmed?: boolean;
 
   @property({
     type: 'string',

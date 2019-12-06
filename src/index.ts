@@ -1,6 +1,5 @@
 import {Application} from './application';
 import {ApplicationConfig} from '@loopback/core';
-require('dotenv').config();
 
 export {Application};
 
