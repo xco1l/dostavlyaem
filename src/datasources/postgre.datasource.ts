@@ -14,6 +14,7 @@ export class PostgreDataSource extends juggler.DataSource
   constructor(
     @inject('datasources.config.Postgre', {optional: true})
     dsConfig: object = {},
+    // All settings sets witn evnvironment variables in ../applications.ts
   ) {
     super(dsConfig);
   }
