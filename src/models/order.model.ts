@@ -25,7 +25,7 @@ export class Order extends Entity {
     type: 'string',
     default: new Date(),
   })
-  created_at?: string;
+  createdAt?: string;
 
   @property({
     type: 'object',
