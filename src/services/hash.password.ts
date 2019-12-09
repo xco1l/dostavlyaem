@@ -28,6 +28,6 @@ export class BcryptHasher implements PasswordHasher<string> {
     providedPass: string,
     storedPass: string,
   ): Promise<boolean> {
-    return await compare(providedPass, storedPass);
+    return compare(providedPass, storedPass);
   }
 }
