@@ -52,11 +52,7 @@ export class UserController {
     })
     user: Omit<User, 'id'>,
   ): Promise<any> {
-    await this.hasher
-      .hashPassword(user.password)
-      .then((hashedPassword: string) => {
-        user.password = hashedPassword;
-      });
+    user.password = await this.hasher.hashPassword(user.password);
     return this.userRepository.create(user);
   }
 
