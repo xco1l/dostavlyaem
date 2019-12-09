@@ -31,13 +31,13 @@ export class Order extends Entity {
     type: 'object',
     required: true,
   })
-  delivery_address: string;
+  deliveryAddress: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  contact_phone: string;
+  contactPhone: string;
 
   @property({
     type: 'number',
