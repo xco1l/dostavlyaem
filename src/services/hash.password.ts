@@ -1,4 +1,5 @@
 import {hash as bcryptHash, compare} from 'bcrypt';
+import {inject} from '@loopback/core';
 
 export type HashPassword = (
   password: string,
@@ -18,10 +19,10 @@ export interface PasswordHasher<T = string> {
 }
 
 export class BcryptHasher implements PasswordHasher<string> {
-  rounds: number;
-  constructor() {
-    this.rounds = 10;
-  }
+  constructor(
+    @inject('services.hasher.rounds')
+    private readonly rounds: number,
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     return bcryptHash(password, this.rounds);

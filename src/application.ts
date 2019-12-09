@@ -56,6 +56,7 @@ export class Application extends BootMixin(
   }
 
   setUpBindigs(): void {
+    this.bind(PasswordHasherBinding.ROUNDS).to(10);
     this.bind(PasswordHasherBinding.PASSWORD_HASHER).toClass(BcryptHasher);
   }
 }
