@@ -10,6 +10,8 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import * as path from 'path';
 import {MySequence} from './sequence';
+import {PasswordHasherBinding} from './keys';
+import {BcryptHasher} from './services';
 
 export class Application extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -28,6 +30,7 @@ export class Application extends BootMixin(
     };
 
     this.bind('datasources.config.Postgre').to(dbConfig);
+    this.setUpBindigs();
     // Set up the custom sequence
     this.sequence(MySequence);
 
@@ -50,5 +53,9 @@ export class Application extends BootMixin(
         nested: true,
       },
     };
+  }
+
+  setUpBindigs(): void {
+    this.bind(PasswordHasherBinding.PASSWORD_HASHER).toClass(BcryptHasher);
   }
 }

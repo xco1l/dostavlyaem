@@ -17,8 +17,9 @@ import {
   del,
   requestBody,
 } from '@loopback/rest';
-import {hash} from 'bcrypt';
+import {inject} from '@loopback/core';
 
+import {PasswordHasher} from '../services/hash.password';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 
@@ -26,6 +27,8 @@ export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
+    @inject('services.hasher')
+    private hasher: PasswordHasher,
   ) {}
 
   @post('/users', {
@@ -48,10 +51,12 @@ export class UserController {
       },
     })
     user: Omit<User, 'id'>,
-  ): Promise<User> {
-    await hash(user.password, 10).then(hashedPassword => {
-      user.password = hashedPassword;
-    });
+  ): Promise<any> {
+    await this.hasher
+      .hashPassword(user.password)
+      .then((hashedPassword: string) => {
+        user.password = hashedPassword;
+      });
     return this.userRepository.create(user);
   }
 
