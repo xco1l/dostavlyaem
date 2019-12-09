@@ -28,7 +28,6 @@ export class BcryptHasher implements PasswordHasher<string> {
     providedPass: string,
     storedPass: string,
   ): Promise<boolean> {
-    const isMatched = await compare(providedPass, storedPass);
-    return isMatched;
+    return await compare(providedPass, storedPass);
   }
 }
