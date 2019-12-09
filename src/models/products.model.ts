@@ -1,8 +1,8 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class Goods extends Entity {
-  constructor(data?: Partial<Goods>) {
+export class Products extends Entity {
+  constructor(data?: Partial<Products>) {
     super(data);
   }
 
@@ -26,8 +26,8 @@ export class Goods extends Entity {
   price: number;
 }
 
-export interface GoodsRelations {
+export interface ProductsRelations {
   // describe navigational properties here
 }
 
-export type GoodsWithRelations = Goods & GoodsRelations;
+export type ProductsWithRelations = Products & ProductsRelations;
