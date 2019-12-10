@@ -53,7 +53,7 @@ export class UserController {
     user: Omit<User, 'id'>,
   ): Promise<User> {
     user.password = await this.hasher.hashPassword(user.password);
-    let savedUser = await this.userRepository.create(user);
+    const savedUser = await this.userRepository.create(user);
     savedUser.confirmHash = await this.hasher.hashPassword(savedUser.getId());
     return savedUser;
   }
