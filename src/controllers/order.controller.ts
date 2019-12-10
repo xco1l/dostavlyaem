@@ -49,26 +49,4 @@ export class OrderController {
   ): Promise<Order> {
     return this.userRepository.orders(1).create(order);
   }
-
-  /* @get('/orders', {
-    responses: {
-      '200': {
-        description: 'Array of Order model instances',
-        content: {
-          'application/json': {
-            schema: {
-              type: 'array',
-              items: getModelSchemaRef(Order, {includeRelations: true}),
-            },
-          },
-        },
-      },
-    },
-  })
-  async find(
-    @param.query.object('filter', getFilterSchemaFor(Order))
-    filter?: Filter<Order>,
-  ): Promise<Order[]> {
-    return this.userRepository.find(filter);
-  }*/
 }
