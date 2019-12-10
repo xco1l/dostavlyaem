@@ -45,9 +45,3 @@ export class Order extends Entity {
   @belongsTo(() => User)
   userId: string;
 }
-
-export interface OrderRelations {
-  // describe navigational properties here
-}
-
-export type OrderWithRelations = Order & OrderRelations;

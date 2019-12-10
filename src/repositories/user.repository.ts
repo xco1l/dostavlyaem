@@ -3,15 +3,14 @@ import {
   repository,
   HasManyRepositoryFactory,
 } from '@loopback/repository';
-import {User, UserRelations, Order} from '../models';
+import {User, Order} from '../models';
 import {PostgreDataSource} from '../datasources';
 import {inject} from '@loopback/core';
 import {OrderRepository} from './order.repository';
 
 export class UserRepository extends DefaultCrudRepository<
   User,
-  typeof User.prototype.id,
-  UserRelations
+  typeof User.prototype.id
 > {
   public orders: HasManyRepositoryFactory<Order, typeof User.prototype.id>;
   constructor(

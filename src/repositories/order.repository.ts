@@ -3,15 +3,14 @@ import {
   BelongsToAccessor,
   repository,
 } from '@loopback/repository';
-import {Order, OrderRelations, User} from '../models';
+import {Order, User} from '../models';
 import {PostgreDataSource} from '../datasources';
 import {inject, Getter} from '@loopback/core';
 import {UserRepository} from './user.repository';
 
 export class OrderRepository extends DefaultCrudRepository<
   Order,
-  typeof Order.prototype.id,
-  OrderRelations
+  typeof Order.prototype.id
 > {
   public readonly user: BelongsToAccessor<User, typeof Order.prototype.id>;
   constructor(
