@@ -17,7 +17,6 @@ export class Application extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
-    super(options);
     const dbConfig = {
       name: 'postgre',
       connector: 'postgresql',
@@ -29,7 +28,9 @@ export class Application extends BootMixin(
       ssl: false,
     };
 
-    this.bind('datasources.config.Postgre').to(dbConfig);
+    super(options);
+
+    this.bind('datasources.config.postgre').to(dbConfig);
     this.setUpBindigs();
     // Set up the custom sequence
     this.sequence(MySequence);
