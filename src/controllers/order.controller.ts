@@ -45,7 +45,7 @@ export class OrderController {
         },
       },
     })
-    @param.path.string('userId')
+    @param.path.number('userId')
     userId: number,
     @requestBody() order: Order,
   ): Promise<Order> {
