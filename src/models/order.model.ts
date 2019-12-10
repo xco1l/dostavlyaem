@@ -1,6 +1,7 @@
 import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {User} from './user.model';
 import {Product} from './product.model';
+import {CartItem} from './cart-item.model';
 
 @model()
 export class Order extends Entity {
@@ -15,8 +16,8 @@ export class Order extends Entity {
   })
   id?: string;
 
-  @property.array(Product)
-  Cart: Array<Product>;
+  @property.array(CartItem, {required: true})
+  Cart: Array<CartItem>;
 
   @property({
     type: 'string',
