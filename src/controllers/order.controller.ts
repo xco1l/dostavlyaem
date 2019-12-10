@@ -26,7 +26,7 @@ export class OrderController {
     public userRepository: UserRepository,
   ) {}
 
-  @post('/orders/{userId}', {
+  @post('/users/{userId}/orders', {
     responses: {
       '200': {
         description: 'Order model instance',
@@ -52,7 +52,7 @@ export class OrderController {
     return this.userRepository.orders(userId).create(order);
   }
 
-  @get('/orders/{userId}', {
+  @get('/users/{userId}/orders', {
     responses: {
       '200': {
         description: "Array of User's Orders",
