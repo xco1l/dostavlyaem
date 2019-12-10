@@ -51,10 +51,11 @@ export class UserController {
       },
     })
     user: Omit<User, 'id'>,
-  ): Promise<any> {
+  ): Promise<User> {
     user.password = await this.hasher.hashPassword(user.password);
-    user.confirmHash = await this.hasher.hashPassword(new Date().toString());
-    return this.userRepository.create(user);
+    let savedUser = await this.userRepository.create(user);
+    savedUser.confirmHash = await this.hasher.hashPassword(savedUser.getId());
+    return savedUser;
   }
 
   @get('/users/count', {
