@@ -2,7 +2,6 @@ import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {User} from './user.model';
 import {Product} from './product.model';
 import {CartItem} from './cart-item.model';
-import uuid = require('uuid');
 
 @model()
 export class Order extends Entity {
@@ -13,7 +12,7 @@ export class Order extends Entity {
   @property({
     type: 'string',
     id: true,
-    default: () => uuid(),
+    defaultFn: 'uuidv4',
   })
   id?: string;
 
