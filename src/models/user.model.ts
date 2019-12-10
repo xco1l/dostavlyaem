@@ -14,11 +14,11 @@ export class User extends Entity {
   userName: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     id: true,
-    generated: true,
+    defaultFn: 'uuidv4',
   })
-  id?: number;
+  id?: string;
 
   @property({
     type: 'string',

@@ -51,9 +51,11 @@ export class UserController {
       },
     })
     user: Omit<User, 'id'>,
-  ): Promise<any> {
+  ): Promise<User> {
     user.password = await this.hasher.hashPassword(user.password);
-    return this.userRepository.create(user);
+    const savedUser = await this.userRepository.create(user);
+    savedUser.confirmHash = await this.hasher.hashPassword(savedUser.getId());
+    return savedUser;
   }
 
   @get('/users/count', {
@@ -127,7 +129,7 @@ export class UserController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @param.query.object('filter', getFilterSchemaFor(User))
     filter?: Filter<User>,
   ): Promise<User> {
@@ -142,7 +144,7 @@ export class UserController {
     },
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @requestBody({
       content: {
         'application/json': {
@@ -163,7 +165,7 @@ export class UserController {
     },
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @requestBody() user: User,
   ): Promise<void> {
     await this.userRepository.replaceById(id, user);
@@ -176,7 +178,7 @@ export class UserController {
       },
     },
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
+  async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.userRepository.deleteById(id);
   }
 }

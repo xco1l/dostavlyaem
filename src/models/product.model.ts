@@ -9,7 +9,7 @@ export class Product extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: true,
+    defaultFn: 'uuidv4',
   })
   id?: string;
 

@@ -26,7 +26,7 @@ export class OrderController {
     public userRepository: UserRepository,
   ) {}
 
-  @post('/orders/{id}', {
+  @post('/users/{userId}/orders', {
     responses: {
       '200': {
         description: 'Order model instance',
@@ -45,10 +45,30 @@ export class OrderController {
         },
       },
     })
-    @param.path.number('userId')
-    userId: number,
-    @requestBody() order: Order,
+    order: Order,
+    @param.path.string('userId')
+    userId: string,
   ): Promise<Order> {
     return this.userRepository.orders(userId).create(order);
+  }
+
+  @get('/users/{userId}/orders', {
+    responses: {
+      '200': {
+        description: "Array of User's Orders",
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: {'x-ts-type': Order}},
+          },
+        },
+      },
+    },
+  })
+  async findOrders(
+    @param.path.string('userId') userId: string,
+    @param.query.string('filter') filter?: Filter<Order>,
+  ): Promise<Order[]> {
+    const orders = await this.userRepository.orders(userId).find(filter);
+    return orders;
   }
 }
