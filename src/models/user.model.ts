@@ -51,9 +51,3 @@ export class User extends Entity {
   @hasMany(() => Order)
   orders: Order[];
 }
-
-export interface UserRelations {
-  // describe navigational properties here
-}
-
-export type UserWithRelations = User & UserRelations;

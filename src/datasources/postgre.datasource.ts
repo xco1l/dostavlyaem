@@ -9,10 +9,10 @@ import {juggler} from '@loopback/repository';
 @lifeCycleObserver('datasource')
 export class PostgreDataSource extends juggler.DataSource
   implements LifeCycleObserver {
-  static dataSourceName = 'Postgre';
+  static dataSourceName = 'postgre';
 
   constructor(
-    @inject('datasources.config.Postgre', {optional: true})
+    @inject('datasources.config.postgre', {optional: true})
     dsConfig: object = {},
     // All settings sets witn evnvironment variables in ../applications.ts
   ) {
