@@ -1,4 +1,5 @@
 import {Entity, model, property} from '@loopback/repository';
+import uuid = require('uuid');
 
 @model()
 export class Product extends Entity {
@@ -9,7 +10,7 @@ export class Product extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: true,
+    default: () => uuid(),
   })
   id?: string;
 
