@@ -26,7 +26,7 @@ export class OrderController {
     public userRepository: UserRepository,
   ) {}
 
-  @post('/orders', {
+  @post('/orders/{id}', {
     responses: {
       '200': {
         description: 'Order model instance',
@@ -45,8 +45,10 @@ export class OrderController {
         },
       },
     })
-    order: Omit<Order, 'id'>,
+    @param.path.string('userId')
+    userId: number,
+    @requestBody() order: Order,
   ): Promise<Order> {
-    return this.userRepository.orders(1).create(order);
+    return this.userRepository.orders(userId).create(order);
   }
 }
