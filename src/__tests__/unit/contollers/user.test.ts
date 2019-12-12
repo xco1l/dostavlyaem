@@ -1,27 +1,28 @@
 import {UserController} from '../../../controllers/user.controller';
-import {User} from '../../../models/user.model';
+
+jest.mock('@loopback/core');
+jest.mock('@loopback/repository');
+jest.mock('@loopback/rest');
 
 const userRepositoryMock: any = {
-  create: jest.fn(({...args}) => {
-    return {...args, getId: jest.fn()};
-  }),
+  create: jest.fn(),
 };
 const hasherServiceMock: any = {
   hashPassword: jest.fn(() => 'someHashString'),
   comparePasswod: jest.fn(() => 'trueOrFalse'),
 };
 
-describe('UserController', async () => {
+describe('UserController', () => {
   let userControllerInstance: UserController;
 
   beforeEach(() => {
     jest.clearAllMocks();
-  });
 
-  userControllerInstance = new UserController(
-    userRepositoryMock,
-    hasherServiceMock,
-  );
+    userControllerInstance = new UserController(
+      userRepositoryMock,
+      hasherServiceMock,
+    );
+  });
 
   it('Instance have a CRUD functions', () => {
     expect(userControllerInstance).toHaveProperty('create');
@@ -31,18 +32,5 @@ describe('UserController', async () => {
     expect(userControllerInstance).toHaveProperty('updateById');
 
     expect(userControllerInstance).toHaveProperty('deleteById');
-  });
-
-  let userFromRequest = new User({
-    userName: 'Test',
-    email: 'Test@test.ru',
-    password: 'qwerty123',
-  });
-  it('Creates user correctly', async () => {
-    const User = await userControllerInstance.create(userFromRequest);
-
-    expect(User.password).toBe('someHashString');
-    expect(User.userName).toBe('Test');
-    expect(User.email).toBe('Test@test.ru');
   });
 });
