@@ -1,6 +1,5 @@
 import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {User} from './user.model';
-import {Product} from './product.model';
 import {CartItem} from './cart-item.model';
 
 @model()
