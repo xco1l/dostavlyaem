@@ -12,7 +12,12 @@ import {User} from '../../../models';
 
 describe('UserController (unit)', () => {
   let repository: StubbedInstanceWithSinonAccessor<UserRepository>;
-  let hasher: BcryptHasher;
+  let hasher: BcryptHasher = {
+    hashPassword: sinon
+      .stub(BcryptHasher.prototype, 'hashPassword')
+      .callsFake(() => new Promise((res: any) => res('someHashString'))),
+    comparePassword: sinon.stub(),
+  };
   beforeEach(givenStubbedRepository);
 
   describe('create()', () => {
@@ -49,13 +54,30 @@ describe('UserController (unit)', () => {
     });
   });
 
+  describe('findById()', () => {
+    it('finds user', async () => {
+      const controller = new UserController(repository, hasher);
+
+      repository.stubs.findById.resolves(
+        new User({
+          userName: 'Test',
+          email: 'test@test.ru',
+          password: 'someHashString',
+          id: 'someIdString',
+        }),
+      );
+
+      const user = await controller.findById('someIdString');
+
+      expect(user).to.containEql({
+        id: 'someIdString',
+      });
+
+      sinon.assert.calledWithMatch(repository.stubs.findById, 'someIdString');
+    });
+  });
+
   function givenStubbedRepository() {
     repository = createStubInstance(UserRepository);
-    hasher = {
-      hashPassword: sinon
-        .stub(BcryptHasher.prototype, 'hashPassword')
-        .callsFake(() => new Promise((res: any) => res('someHashString'))),
-      comparePassword: sinon.stub(),
-    };
   }
 });
