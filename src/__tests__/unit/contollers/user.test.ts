@@ -4,95 +4,58 @@ import {
   sinon,
   StubbedInstanceWithSinonAccessor,
 } from '@loopback/testlab';
-import {UserController} from '../../../controllers';
-import {User} from '../../../models';
+
 import {UserRepository} from '../../../repositories';
-import {givenUser} from '../../helpers';
-import {PasswordHasher} from '../../../services';
+import {UserController} from '../../../controllers';
+import {BcryptHasher} from '../../../services';
+import {User} from '../../../models';
 
-import {DataObject, AnyObject, Filter} from '@loopback/repository';
-describe('UserController', () => {
-  let userRepo: StubbedInstanceWithSinonAccessor<UserRepository>,
-    hasher: PasswordHasher;
+describe('UserController (unit)', () => {
+  let repository: StubbedInstanceWithSinonAccessor<UserRepository>;
+  let hasher: BcryptHasher;
+  beforeEach(givenStubbedRepository);
 
-  //Controller methods
-  let create: sinon.SinonStub<
-      [DataObject<User>, (AnyObject | undefined)?],
-      Promise<User>
-    >,
-    findById: sinon.SinonStub<
-      [
-        string | undefined,
-        (Filter<User> | undefined)?,
-        (AnyObject | undefined)?,
-      ],
-      Promise<User>
-    >,
-    find: sinon.SinonStub<
-      [(Filter<User> | undefined)?, (AnyObject | undefined)?],
-      Promise<User[]>
-    >,
-    replaceById: sinon.SinonStub<
-      [string | undefined, DataObject<User>, (AnyObject | undefined)?],
-      Promise<void>
-    >,
-    updateById: sinon.SinonStub<
-      [string | undefined, DataObject<User>, (AnyObject | undefined)?],
-      Promise<void>
-    >,
-    deleteById: sinon.SinonStub<
-      [string | undefined, (AnyObject | undefined)?],
-      Promise<void>
-    >;
+  describe('create()', () => {
+    it('creates user', async () => {
+      const controller = new UserController(repository, hasher);
 
-  let controller: UserController,
-    aUser: User,
-    aUserWithId: User,
-    aChangedUser: User,
-    aListOfUser: User[];
+      repository.stubs.create.resolves(
+        new User({
+          userName: 'Test',
+          email: 'test@test.ru',
+          password: 'someHashString',
+        }),
+      );
 
-  describe('create a user', () => {
-    it('creates a user', async () => {
-      create.resolves(aUserWithId);
-      const result = await controller.create(aUser);
-      expect(result).to.eql(aUserWithId);
-      sinon.assert.calledWith(create, aUser);
+      const users = await controller.create(
+        new User({
+          userName: 'Test',
+          email: 'test@test.ru',
+          password: 'qwerty',
+        }),
+      );
+
+      expect(users).to.containEql({
+        userName: 'Test',
+        email: 'test@test.ru',
+        password: 'someHashString',
+      });
+
+      sinon.assert.calledWithMatch(repository.stubs.create, {
+        userName: 'Test',
+        password: 'someHashString',
+        email: 'test@test.ru',
+      });
     });
   });
 
-  function resetRepositories() {
-    userRepo = createStubInstance(UserRepository);
-    aUser = givenUser();
-    aUserWithId = givenUser({
-      id: 'someRandomString',
-    });
-    aListOfUser = [
-      aUserWithId,
-      givenUser({
-        id: 'anotherRndString',
-        userName: 'Test 2',
-        email: 'test2@test.ru',
-        password: 'qwerty321',
-      }),
-    ] as User[];
-    aChangedUser = givenUser({
-      id: aUserWithId.id,
-      userName: 'Test Testovich Testov',
-    });
-
-    ({
-      create,
-      findById,
-      find,
-      replaceById,
-      updateById,
-      deleteById,
-    } = userRepo.stubs);
-
+  function givenStubbedRepository() {
+    repository = createStubInstance(UserRepository);
     hasher = {
-      hashPassword: sinon.stub(),
+      hashPassword: sinon
+        .stub(BcryptHasher.prototype, 'hashPassword')
+        .callsFake(() => new Promise((res: any) => res('someHashString'))),
       comparePassword: sinon.stub(),
     };
-    controller = new UserController(userRepo, hasher);
   }
 });
