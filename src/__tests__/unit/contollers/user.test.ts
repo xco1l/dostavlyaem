@@ -1,36 +1,98 @@
-import {UserController} from '../../../controllers/user.controller';
+import {
+  createStubInstance,
+  expect,
+  sinon,
+  StubbedInstanceWithSinonAccessor,
+} from '@loopback/testlab';
+import {UserController} from '../../../controllers';
+import {User} from '../../../models';
+import {UserRepository} from '../../../repositories';
+import {givenUser} from '../../helpers';
+import {PasswordHasher} from '../../../services';
 
-jest.mock('@loopback/core');
-jest.mock('@loopback/repository');
-jest.mock('@loopback/rest');
-
-const userRepositoryMock: any = {
-  create: jest.fn(),
-};
-const hasherServiceMock: any = {
-  hashPassword: jest.fn(() => 'someHashString'),
-  comparePasswod: jest.fn(() => 'trueOrFalse'),
-};
-
+import {DataObject, AnyObject, Filter} from '@loopback/repository';
 describe('UserController', () => {
-  let userControllerInstance: UserController;
+  let userRepo: StubbedInstanceWithSinonAccessor<UserRepository>,
+    hasher: PasswordHasher;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
+  //Controller methods
+  let create: sinon.SinonStub<
+      [DataObject<User>, (AnyObject | undefined)?],
+      Promise<User>
+    >,
+    findById: sinon.SinonStub<
+      [
+        string | undefined,
+        (Filter<User> | undefined)?,
+        (AnyObject | undefined)?,
+      ],
+      Promise<User>
+    >,
+    find: sinon.SinonStub<
+      [(Filter<User> | undefined)?, (AnyObject | undefined)?],
+      Promise<User[]>
+    >,
+    replaceById: sinon.SinonStub<
+      [string | undefined, DataObject<User>, (AnyObject | undefined)?],
+      Promise<void>
+    >,
+    updateById: sinon.SinonStub<
+      [string | undefined, DataObject<User>, (AnyObject | undefined)?],
+      Promise<void>
+    >,
+    deleteById: sinon.SinonStub<
+      [string | undefined, (AnyObject | undefined)?],
+      Promise<void>
+    >;
 
-    userControllerInstance = new UserController(
-      userRepositoryMock,
-      hasherServiceMock,
-    );
+  let controller: UserController,
+    aUser: User,
+    aUserWithId: User,
+    aChangedUser: User,
+    aListOfUser: User[];
+
+  describe('create a user', () => {
+    it('creates a user', async () => {
+      create.resolves(aUserWithId);
+      const result = await controller.create(aUser);
+      expect(result).to.eql(aUserWithId);
+      sinon.assert.calledWith(create, aUser);
+    });
   });
 
-  it('Instance have a CRUD functions', () => {
-    expect(userControllerInstance).toHaveProperty('create');
+  function resetRepositories() {
+    userRepo = createStubInstance(UserRepository);
+    aUser = givenUser();
+    aUserWithId = givenUser({
+      id: 'someRandomString',
+    });
+    aListOfUser = [
+      aUserWithId,
+      givenUser({
+        id: 'anotherRndString',
+        userName: 'Test 2',
+        email: 'test2@test.ru',
+        password: 'qwerty321',
+      }),
+    ] as User[];
+    aChangedUser = givenUser({
+      id: aUserWithId.id,
+      userName: 'Test Testovich Testov',
+    });
 
-    expect(userControllerInstance).toHaveProperty('find');
+    ({
+      create,
+      findById,
+      find,
+      replaceById,
+      updateById,
+      deleteById,
+    } = userRepo.stubs);
 
-    expect(userControllerInstance).toHaveProperty('updateById');
-
-    expect(userControllerInstance).toHaveProperty('deleteById');
-  });
+    hasher = {
+      hashPassword: sinon.stub(),
+      comparePassword: sinon.stub(),
+    };
+    controller = new UserController(userRepo, hasher);
+  }
 });
