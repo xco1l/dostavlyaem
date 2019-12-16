@@ -1,7 +1,11 @@
 import {Entity, model, property, hasMany} from '@loopback/repository';
 import {Order} from './order.model';
 
-@model()
+@model({
+  settings: {
+    hiddenProperties: ['password', 'confirmHash', 'confirmed'],
+  },
+})
 export class User extends Entity {
   constructor(data?: Partial<User>) {
     super(data);
