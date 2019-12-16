@@ -1,83 +1,63 @@
-import {
-  createStubInstance,
-  expect,
-  sinon,
-  StubbedInstanceWithSinonAccessor,
-} from '@loopback/testlab';
-
-import {UserRepository} from '../../../repositories';
-import {UserController} from '../../../controllers';
-import {BcryptHasher} from '../../../services';
-import {User} from '../../../models';
+import {UserRepository} from '../../../repositories/user.repository';
+import {UserController} from '../../../controllers/user.controller';
+import {PasswordHasher} from '../../../services/hash.password';
+import {User} from '../../../models/user.model';
+import createMockInstance from 'jest-create-mock-instance';
 
 describe('UserController (unit)', () => {
-  let repository: StubbedInstanceWithSinonAccessor<UserRepository>;
-  let hasher: BcryptHasher = {
-    hashPassword: sinon
-      .stub(BcryptHasher.prototype, 'hashPassword')
-      .callsFake(() => new Promise((res: any) => res('someHashString'))),
-    comparePassword: sinon.stub(),
+  let userRepository: jest.Mocked<UserRepository>;
+  let hasher: PasswordHasher = {
+    hashPassword: jest.fn().mockResolvedValue(Promise.resolve('someHashString')),
+    comparePassword: jest.fn(),
   };
-  beforeEach(givenStubbedRepository);
+  beforeEach(() => {
+    userRepository = createMockInstance(UserRepository);
+  });
 
-  describe('create()', () => {
-    it('creates user', async () => {
-      const controller = new UserController(repository, hasher);
+  it('creates user', async () => {
+    const controller = new UserController(userRepository, hasher);
 
-      repository.stubs.create.resolves(
-        new User({
-          userName: 'Test',
-          email: 'test@test.ru',
-          password: 'someHashString',
-        }),
-      );
-
-      const users = await controller.create(
-        new User({
-          userName: 'Test',
-          email: 'test@test.ru',
-          password: 'qwerty',
-        }),
-      );
-
-      expect(users).to.containEql({
+    userRepository.create.mockImplementation((user) =>
+      Promise.resolve(
+        new User(user as any),
+      ),
+    );
+    const user: User = await controller.create(
+      new User({
         userName: 'Test',
         email: 'test@test.ru',
-        password: 'someHashString',
-      });
+        password: 'qwerty',
+      }),
+    );
 
-      sinon.assert.calledWithMatch(repository.stubs.create, {
-        userName: 'Test',
-        password: 'someHashString',
-        email: 'test@test.ru',
-      });
+    expect(userRepository.create.mock.calls.length).toBe(1)
+
+    expect(user).toMatchObject({
+      userName: 'Test',
+      email: 'test@test.ru',
+      password: 'someHashString',
+      confirmHash: 'someHashString'
     });
   });
 
-  describe('findById()', () => {
-    it('finds user', async () => {
-      const controller = new UserController(repository, hasher);
+  it('search user by id', async () => {
+    const controller = new UserController(userRepository, hasher);
 
-      repository.stubs.findById.resolves(
-        new User({
-          userName: 'Test',
-          email: 'test@test.ru',
-          password: 'someHashString',
-          id: 'someIdString',
-        }),
-      );
+    userRepository.findById.mockResolvedValue(new User({
+      userName: 'Test',
+      email: 'test@test.ru',
+      id: 'someIdString'
+    }))
 
-      const user = await controller.findById('someIdString');
+    const user = await controller.findById('someIdString')
 
-      expect(user).to.containEql({
-        id: 'someIdString',
-      });
+    expect(user).toMatchObject({
+      userName: 'Test',
+      email: 'test@test.ru',
+      id: 'someIdString',
+    })
 
-      sinon.assert.calledWithMatch(repository.stubs.findById, 'someIdString');
-    });
-  });
-
-  function givenStubbedRepository() {
-    repository = createStubInstance(UserRepository);
-  }
+    expect(userRepository.findById.mock.calls[0][0]).toBe('someIdString')
+    expect(userRepository.findById.mock.calls.length).toBe(1)
+  })
 });
