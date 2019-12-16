@@ -30,7 +30,7 @@ describe('UserController (unit)', () => {
       }),
     );
 
-    expect(userRepository.create.mock.calls.length).toBe(1)
+    expect(userRepository.create).toHaveBeenCalledTimes(1)
 
     expect(user).toMatchObject({
       userName: 'Test',
@@ -57,7 +57,7 @@ describe('UserController (unit)', () => {
       id: 'someIdString',
     })
 
-    expect(userRepository.findById.mock.calls[0][0]).toBe('someIdString')
-    expect(userRepository.findById.mock.calls.length).toBe(1)
+    expect(userRepository.findById).toHaveBeenCalledWith('someIdString', undefined)
+    expect(userRepository.findById).toHaveBeenCalledTimes(1)
   })
 });
