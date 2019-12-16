@@ -1,4 +1,4 @@
-import {hash as bcryptHash, compare} from 'bcrypt';
+import {hash as bcryptHash, compare as BcryptCompare} from 'bcrypt';
 
 const BCRYPT_ROUNDS: number = 10;
 
@@ -28,6 +28,6 @@ export class BcryptHasher implements PasswordHasher<string> {
     providedPass: string,
     storedPass: string,
   ): Promise<boolean> {
-    return compare(providedPass, storedPass);
+    return BcryptCompare(providedPass, storedPass);
   }
 }
