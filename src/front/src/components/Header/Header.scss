@@ -1,0 +1,16 @@
+.header {
+  padding: 25px 0 15px;
+  &__item {
+    display: block;
+
+    &_logo {
+      font-family: 'Blowbrush';
+      font-size: 40px;
+    }
+  }
+  &__items {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
