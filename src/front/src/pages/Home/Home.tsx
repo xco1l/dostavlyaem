@@ -1,9 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {Header, Footer, Container} from 'components';
 import {Navigation} from 'containers';
 import './Home.scss';
-const Home: React.FC = () => {
+import {UserStore} from 'stores';
+import {inject, observer} from 'mobx-react';
+
+interface homeInjectedProps {
+  userStore: UserStore;
+}
+
+const Home: React.FC = props => {
+  const userStore = (props as homeInjectedProps).userStore;
+
+  useEffect(() => {
+    userStore.getUser();
+  });
+
   return (
     <div className="page">
       <div className="page__wrapper">
@@ -18,4 +31,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default inject('userStore')(observer(Home));
