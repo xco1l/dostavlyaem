@@ -9,14 +9,15 @@ const Navigation: React.FC<NavigationProps> = ({className, navLinks = []}) => {
       <Container>
         <div className="navigation__content">
           <ul className="navigation__list">
-            {navLinks.length &&
-              navLinks.map(link => {
-                return (
-                  <li className="navigation__link" key={link.href}>
-                    <a href={link.href}>{link.label}</a>
-                  </li>
-                );
-              })}
+            {navLinks.length
+              ? navLinks.map(link => {
+                  return (
+                    <li className="navigation__link" key={link.href}>
+                      <a href={link.href}>{link.label}</a>
+                    </li>
+                  );
+                })
+              : null}
           </ul>
           <div className="navigation__cart"></div>
         </div>
