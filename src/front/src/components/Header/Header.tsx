@@ -3,10 +3,10 @@ import React from 'react';
 import './Header.scss';
 import {Container} from 'components';
 import {inject, observer} from 'mobx-react';
-import {userStoreInjected} from 'types';
+import {useStores} from 'stores';
 
-const Header: React.FC = props => {
-  const userStore = (props as userStoreInjected).userStore;
+const Header: React.FC = () => {
+  const {userStore} = useStores();
 
   return (
     <header className="header">

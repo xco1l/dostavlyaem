@@ -4,17 +4,12 @@ import {Provider} from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
 
 import {Home, Auth} from 'pages';
-import {LinksStore, UserStore} from 'stores';
-
-const stores = {
-  linksStore: new LinksStore(),
-  userStore: new UserStore(),
-};
+import {initialStores} from 'stores';
 
 const App: React.FC = () => {
   return (
     <div className="wrap">
-      <Provider {...stores}>
+      <Provider {...initialStores}>
         {process.env.NODE_ENV === 'DEVELOPMENT' && <DevTools />}
         <Switch>
           <Route exact path={'/'} render={() => <Home />} />

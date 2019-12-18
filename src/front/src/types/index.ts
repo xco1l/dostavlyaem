@@ -1,10 +1,7 @@
 import {UserStore, LinksStore} from 'stores';
 
-export interface userStoreInjected {
+export interface IStores {
   userStore: UserStore;
-}
-
-export interface linksStoreInjected {
   linksStore: LinksStore;
 }
 
