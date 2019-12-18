@@ -1,7 +1,11 @@
-import {UserStore} from 'stores';
+import {UserStore, LinksStore} from 'stores';
 
 export interface userStoreInjected {
   userStore: UserStore;
+}
+
+export interface linksStoreInjected {
+  linksStore: LinksStore;
 }
 
 export interface FooterProps {

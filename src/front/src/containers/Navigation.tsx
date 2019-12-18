@@ -1,17 +1,12 @@
 import React, {useEffect} from 'react';
 import {observer, inject} from 'mobx-react';
 
-import {NavigationProps} from 'types';
+import {NavigationProps, linksStoreInjected} from 'types';
 import {Navigation as NavigationComponent} from 'components';
-import {LinksStore} from 'stores';
-
-interface navigationInjectedProps extends NavigationProps {
-  linksStore: LinksStore;
-}
 
 const Navigation: React.SFC<NavigationProps> = props => {
   const className = props.className;
-  const linksStore = (props as navigationInjectedProps).linksStore;
+  const linksStore = (props as linksStoreInjected).linksStore;
   useEffect(() => {
     if (!linksStore.links.length) linksStore.getLinks();
   });
