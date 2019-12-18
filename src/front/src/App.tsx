@@ -4,10 +4,11 @@ import {Provider} from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
 
 import {Home, Auth} from 'pages';
-import {LinksStore} from 'stores';
+import {LinksStore, UserStore} from 'stores';
 
 const stores = {
   linksStore: new LinksStore(),
+  userStrore: new UserStore(),
 };
 
 const App: React.FC = () => {
