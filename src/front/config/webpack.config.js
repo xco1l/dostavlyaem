@@ -299,6 +299,7 @@ module.exports = function(webpackEnv) {
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
+          '@': path.resolve('../../'),
         }),
         ...(modules.webpackAliases || {}),
       },
