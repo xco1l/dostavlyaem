@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Route, Switch} from 'react-router-dom';
 import {Provider} from 'mobx-react';
-import {observable} from 'mobx';
+import {observable, action} from 'mobx';
 import DevTools from 'mobx-react-devtools';
 
 import {Home} from 'pages';
@@ -13,17 +13,18 @@ const stores = observable({
 });
 
 const App: React.FC = () => {
-  const getLinks = async () => {
-    return await axios.get('/navlinks');
-  };
+  const getLinks = action(async () => {
+    const links = await axios.get('/navlinks');
+    stores.navLinks = links.data;
+  });
 
   useEffect(() => {
-    stores.navLinks = getLinks() as any;
+    getLinks();
   });
 
   return (
     <div className="wrap">
-      <Provider {...stores}>
+      <Provider stores={stores}>
         {process.env.NODE_ENV === 'DEVELOPMENT' && <DevTools />}
         <Switch>
           <Route exact path={'/'} render={() => <Home />} />
