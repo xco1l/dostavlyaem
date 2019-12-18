@@ -1,6 +1,6 @@
 import {UserStore} from 'stores';
 
-export interface homeInjectedProps {
+export interface userStoreInjected {
   userStore: UserStore;
 }
 
