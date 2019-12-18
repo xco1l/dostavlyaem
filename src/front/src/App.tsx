@@ -8,7 +8,7 @@ import {LinksStore, UserStore} from 'stores';
 
 const stores = {
   linksStore: new LinksStore(),
-  userStrore: new UserStore(),
+  userStore: new UserStore(),
 };
 
 const App: React.FC = () => {
