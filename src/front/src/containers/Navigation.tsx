@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {observer, inject} from 'mobx-react';
 
-import {NavigationProps} from 'components/Navigation/Navigation';
+import {NavigationProps} from 'types';
 import {Navigation as NavigationComponent} from 'components';
 import {LinksStore} from 'stores';
 

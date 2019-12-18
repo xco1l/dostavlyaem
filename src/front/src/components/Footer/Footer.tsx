@@ -1,5 +1,6 @@
 import React from 'react';
 import {Container} from 'components';
+import {FooterProps} from 'types';
 
 const Footer: React.FC<FooterProps> = ({className}) => {
   return (
@@ -12,7 +13,3 @@ const Footer: React.FC<FooterProps> = ({className}) => {
 };
 
 export default Footer;
-
-interface FooterProps {
-  className?: string;
-}

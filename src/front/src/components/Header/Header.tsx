@@ -2,6 +2,7 @@ import React from 'react';
 
 import './Header.scss';
 import {Container} from 'components';
+import {inject, observer} from 'mobx-react';
 
 const Header: React.FC = () => {
   return (
@@ -28,4 +29,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default inject('userStore')(observer(Header));

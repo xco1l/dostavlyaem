@@ -1,14 +1,10 @@
 import React, {useEffect} from 'react';
+import {inject, observer} from 'mobx-react';
 
 import {Header, Footer, Container} from 'components';
 import {Navigation} from 'containers';
 import './Home.scss';
-import {UserStore} from 'stores';
-import {inject, observer} from 'mobx-react';
-
-interface homeInjectedProps {
-  userStore: UserStore;
-}
+import {homeInjectedProps} from 'types';
 
 const Home: React.FC = props => {
   const userStore = (props as homeInjectedProps).userStore;
