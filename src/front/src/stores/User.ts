@@ -4,7 +4,7 @@ import {axios} from 'core';
 import {User} from '@/models';
 
 class UserStore {
-  @observable User: User | {} = {};
+  @observable User: User = {} as any;
 
   @action async getUser() {
     try {
