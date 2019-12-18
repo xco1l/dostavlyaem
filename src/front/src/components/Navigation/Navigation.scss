@@ -6,7 +6,13 @@
   }
 
   &__link {
-    text-decoration: none;
+    a {
+      text-decoration: none;
+      color: #000;
+      &:visited {
+        color: #000;
+      }
+    }
 
     &:not(:first-child) {
       margin-left: 15px;

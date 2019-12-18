@@ -9,16 +9,14 @@ const Navigation: React.FC<NavigationProps> = ({className, navLinks = []}) => {
       <Container>
         <div className="navigation__content">
           <ul className="navigation__list">
-            <li className="navigation__link">NAV LINK</li>
-            <li className="navigation__link">NAV LINK</li>
-            <li className="navigation__link">NAV LINK</li>
-            <li className="navigation__link">NAV LINK</li>
-            <li className="navigation__link">NAV LINK</li>
-            <li className="navigation__link">NAV LINK</li>
-            {
-              //TODO
-              //Показать ссылки из БД
-            }
+            {navLinks.length &&
+              navLinks.map(link => {
+                return (
+                  <li className="navigation__link" key={link.href}>
+                    <a href={link.href}>{link.label}</a>
+                  </li>
+                );
+              })}
           </ul>
           <div className="navigation__cart"></div>
         </div>
