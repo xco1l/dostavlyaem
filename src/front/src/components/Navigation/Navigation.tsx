@@ -2,9 +2,21 @@ import React from 'react';
 
 import './Navigation.scss';
 import {Container} from 'components';
-import {NavigationProps} from 'types';
 
-const Navigation: React.FC<NavigationProps> = ({className, navLinks = []}) => {
+export interface navLink {
+  href: string;
+  label: string;
+}
+
+export interface NavigationProps {
+  className?: string;
+  navLinks?: navLink[];
+}
+
+export const Navigation: React.FC<NavigationProps> = ({
+  className,
+  navLinks = [],
+}) => {
   return (
     <div className={(className || '') + ' navigation'}>
       <Container>
@@ -26,5 +38,3 @@ const Navigation: React.FC<NavigationProps> = ({className, navLinks = []}) => {
     </div>
   );
 };
-
-export default Navigation;

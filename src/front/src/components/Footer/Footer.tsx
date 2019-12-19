@@ -1,8 +1,11 @@
 import React from 'react';
 import {Container} from 'components';
-import {FooterProps} from 'types';
 
-const Footer: React.FC<FooterProps> = ({className}) => {
+export interface FooterProps {
+  className?: string;
+}
+
+export const Footer: React.FC<FooterProps> = ({className}) => {
   return (
     <footer className={className + ' footer'}>
       <Container>
@@ -11,5 +14,3 @@ const Footer: React.FC<FooterProps> = ({className}) => {
     </footer>
   );
 };
-
-export default Footer;

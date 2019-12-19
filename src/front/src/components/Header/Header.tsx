@@ -2,10 +2,10 @@ import React from 'react';
 
 import './Header.scss';
 import {Container} from 'components';
-import {inject, observer} from 'mobx-react';
 import {useStores} from 'stores';
+import {observer} from 'mobx-react';
 
-const Header: React.FC = () => {
+export const Header: React.FC = observer(() => {
   const {userStore} = useStores();
 
   return (
@@ -30,6 +30,4 @@ const Header: React.FC = () => {
       </Container>
     </header>
   );
-};
-
-export default inject('userStore')(observer(Header));
+});
