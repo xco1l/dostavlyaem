@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Blowbrush';
+  src: url('~fonts/blowbrush/blowbrush.eot');
+  src: local('☺'), url('~fonts/blowbrush/blowbrush.woff') format('woff'),
+    url('~fonts/blowbrush/blowbrush.ttf') format('truetype'),
+    url('~fonts/blowbrush/blowbrush.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

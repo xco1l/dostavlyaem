@@ -1,0 +1,21 @@
+.navigation {
+  padding: 10px 0;
+  &__list {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__link {
+    a {
+      text-decoration: none;
+      color: #000;
+      &:visited {
+        color: #000;
+      }
+    }
+
+    &:not(:first-child) {
+      margin-left: 15px;
+    }
+  }
+}
