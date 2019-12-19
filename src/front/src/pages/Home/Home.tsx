@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
-import {inject, observer} from 'mobx-react';
 
 import {Header, Footer, Container} from 'components';
 import {Navigation} from 'containers';
-import './Home.scss';
 import {useStores} from 'stores';
+
+import './Home.scss';
 
 const Home: React.FC = props => {
   const {userStore} = useStores();
@@ -27,4 +27,4 @@ const Home: React.FC = props => {
   );
 };
 
-export default inject('userStore')(observer(Home));
+export default Home;
