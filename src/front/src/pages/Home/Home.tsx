@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-import {Header, Footer, Container} from 'components';
+import {Header, Footer, Menu} from 'components';
 import {Navigation} from 'containers';
 import {useStores} from 'stores';
 
@@ -19,7 +19,7 @@ const Home: React.FC = props => {
         <Header />
         <Navigation />
         <div className="page__content">
-          <Container>MENU</Container>
+          <Menu />
         </div>
       </div>
       <Footer className="page__footer" />

@@ -1,4 +1,6 @@
 import React from 'react';
+
+import './Footer.scss';
 import {Container} from 'components';
 
 export interface FooterProps {

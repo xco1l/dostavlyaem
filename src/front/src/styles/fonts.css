@@ -7,3 +7,13 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'GeosansLight';
+  src: url('~fonts/geosans_light/GeosansLight.eot');
+  src: local('☺'), url('~fonts/geosans_light/GeosansLight.woff') format('woff'),
+    url('~fonts/geosans_light/GeosansLight.ttf') format('truetype'),
+    url('~fonts/geosans_light/GeosansLight.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

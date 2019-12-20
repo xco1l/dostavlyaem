@@ -1,21 +1,26 @@
 .navigation {
   padding: 10px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
   &__list {
     display: flex;
     flex-direction: row;
   }
 
-  &__link {
-    a {
-      text-decoration: none;
-      color: #000;
-      &:visited {
-        color: #000;
-      }
-    }
-
+  &__item {
     &:not(:first-child) {
       margin-left: 15px;
+    }
+  }
+
+  &__link {
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+
+    &:visited {
+      color: #000;
     }
   }
 }
