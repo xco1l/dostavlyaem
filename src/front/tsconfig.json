@@ -20,5 +20,6 @@
     },
     "experimentalDecorators": true
   },
-  "include": ["src", "../../"]
+  "include": ["src"],
+  "files": ["src/declaration.d.ts"]
 }
