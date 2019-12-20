@@ -1,9 +1,10 @@
 import React from 'react';
+import {observer} from 'mobx-react';
+
+import {Container, Avatar} from 'components';
+import {useStores} from 'stores';
 
 import './Header.scss';
-import {Container} from 'components';
-import {useStores} from 'stores';
-import {observer} from 'mobx-react';
 
 export const Header: React.FC = observer(() => {
   const {userStore} = useStores();
@@ -23,7 +24,16 @@ export const Header: React.FC = observer(() => {
                 <button className="sign-up">Зарегистрироваться</button>
               </div>
             ) : (
-              <div className="header__user">{userStore.User.userName}</div>
+              <div className="header__user">
+                <div className="header__avatar-wrap">
+                  <Avatar />
+                </div>
+                <div className="header__userName">
+                  <div className="header__userName-inner">
+                    {userStore.User.userName}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>

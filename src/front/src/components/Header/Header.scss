@@ -1,4 +1,8 @@
+@import '~styles/vars.scss';
 .header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
   padding: 25px 0 15px;
   &__item {
     display: block;
@@ -6,11 +10,32 @@
     &_logo {
       font-family: 'Blowbrush';
       font-size: 40px;
+      color: $main_color;
     }
   }
   &__items {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+  }
+
+  &__user {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  &__avatar-wrap {
+    width: 36px;
+    height: 36px;
+  }
+
+  &__userName {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+    font-size: 18px;
+    font-weight: 700;
   }
 }
