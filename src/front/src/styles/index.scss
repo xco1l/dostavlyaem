@@ -1,15 +1,29 @@
 @import '~reset-css';
 @import './fonts.css';
 
+body {
+  font-family: 'GeosansLight';
+  letter-spacing: 2px;
+}
+
 .page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  &__wrapper {
+  &__wrapper,
+  &__content {
+    width: 100%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 }
