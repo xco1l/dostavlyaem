@@ -25,8 +25,10 @@ export const Navigation: React.FC<NavigationProps> = ({
             {navLinks.length
               ? navLinks.map(link => {
                   return (
-                    <li className="navigation__link" key={link.href}>
-                      <a href={link.href}>{link.label}</a>
+                    <li className="navigation__item" key={link.href}>
+                      <a className="navigation__link" href={link.href}>
+                        {link.label}
+                      </a>
                     </li>
                   );
                 })
