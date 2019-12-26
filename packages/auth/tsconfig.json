@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "rootDir": "src",
-    "module": "ES6",
-    "strict": true,
-    "esModuleInterop": true
-  }
-}
