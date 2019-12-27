@@ -1,8 +1,10 @@
 {
-    "compilerOptions": {
-        "baseUrl": "src",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "sourceMap": true
-    }
+  "compilerOptions": {
+    "baseUrl": "src",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "target": "ES5"
+  }
 }
