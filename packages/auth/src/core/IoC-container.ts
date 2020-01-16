@@ -1,37 +1,43 @@
-import {RequestHandler, RouterOptions} from 'express';
 import 'reflect-metadata';
+import {Binding} from './Binding';
 
-type Middleware = RequestHandler;
-type WrapperFunction = (action: any) => any;
-type Controller = InstanceType<any>;
+export const PARAMETER_KEY = 'injection:param';
 
-export function Get(path?: string): MethodDecorator {
-  return routesHelper('get', path);
+class DContainer {
+  constructor() {
+    this.bind = this.bind.bind(this);
+    this.get = this.get.bind(this);
+  }
+  private instances: Map<string, Binding> = new Map();
+
+  public bind(key: string) {
+    const instance = Binding.bind(key);
+    this.instances.set(key, instance);
+    return instance;
+  }
+
+  public get(key: string) {
+    const binding = this.instances.get(key);
+    return binding.resolve();
+  }
 }
 
-export function routesHelper(httpVerb: string, path?: string): MethodDecorator {
-  return (
-    target: any,
-    propertyKey: string | symbol,
-    descriptor?: PropertyDescriptor,
-  ) => {
-    let routePropperties = Reflect.getOwnMetadata(propertyKey, target);
+export const container = new DContainer();
 
-    if (!routePropperties) routePropperties = {};
-
-    routePropperties = {
-      httpVerb,
-      path: path ? '/' + path : '',
-      ...routePropperties,
-    };
-    Reflect.defineMetadata(propertyKey, routePropperties, target);
-    if (descriptor) return descriptor;
+export function inject(bindKey: string): ParameterDecorator {
+  return (target: any, _: string | symbol, index: number) => {
+    const meta = Reflect.getOwnMetadata(PARAMETER_KEY, target);
+    if (meta) {
+      mergeOwnMeta(meta, [{bindKey, index, target}], target);
+    } else
+      Reflect.defineMetadata(PARAMETER_KEY, [{bindKey, index, target}], target);
   };
 }
 
-export function Controller(path: string): ClassDecorator {
-  return <TFunction extends Function>(target: TFunction) => {
-    Reflect.defineMetadata('BASE_PATH', '/' + path, target.prototype);
-    return target;
-  };
+function mergeOwnMeta(ownMeta: Array<any>, newMeta: Array<any>, target: any) {
+  Reflect.defineMetadata(PARAMETER_KEY, ownMeta.concat(newMeta), target);
+}
+
+export function hasInjections(target: any): boolean {
+  return !!Reflect.getOwnMetadata(PARAMETER_KEY, target);
 }
