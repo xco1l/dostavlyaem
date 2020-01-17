@@ -1,9 +1,13 @@
 import 'reflect-metadata';
-
+import {container} from './IoC-container';
 type Controller = InstanceType<any>;
 
 export function Get(path?: string): MethodDecorator {
   return routesHelper('get', path);
+}
+
+export function Post(path?: string): MethodDecorator {
+  return routesHelper('post', path);
 }
 
 export function routesHelper(httpVerb: string, path?: string): MethodDecorator {
@@ -29,6 +33,7 @@ export function routesHelper(httpVerb: string, path?: string): MethodDecorator {
 export function Controller(path: string): ClassDecorator {
   return <TFunction extends Function>(target: TFunction) => {
     Reflect.defineMetadata('BASE_PATH', '/' + path, target.prototype);
+    container.bind(`controller.${target.name}`).toSingleton(target);
     return target;
   };
 }
