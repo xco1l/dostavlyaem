@@ -1,9 +1,16 @@
 import 'reflect-metadata';
 
+export enum BindingType {
+  CLASS = 'CLASS',
+  SINGLETON = 'SINGLETON',
+  INSTANCE = 'INSTANCE',
+}
+
 export class Binding {
   public readonly key: string;
-  private _type?: string;
-  private _valueConstructor;
+  public type?: string;
+  public valueConstructor;
+  public instance: any;
 
   constructor(key: string) {
     this.key = key;
@@ -14,19 +21,20 @@ export class Binding {
   }
 
   toClass(ctor): this {
-    this._type = 'CLASS';
-    this._valueConstructor = ctor;
+    this.type = BindingType.CLASS;
+    this.valueConstructor = ctor;
     return this;
   }
 
-  public resolve() {
-    switch (this._type) {
-      case 'CLASS':
-        return this._createInstanceFromCtor(this._valueConstructor);
-    }
+  toSingleton(ctor): this {
+    this.type = BindingType.SINGLETON;
+    this.valueConstructor = ctor;
+    return this;
   }
 
-  private _createInstanceFromCtor(ctor) {
-    return new ctor();
+  to(value) {
+    this.type = BindingType.INSTANCE;
+    this.instance = value;
+    return this;
   }
 }

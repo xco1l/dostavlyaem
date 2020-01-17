@@ -6,8 +6,9 @@ import express, {
   NextFunction,
   Router,
 } from 'express';
-import {Repository} from 'typeorm';
-import {container, PARAMETER_KEY, hasInjections} from './IoC-container';
+import {createConnection, Connection, ObjectType} from 'typeorm';
+import {container} from './IoC-container';
+import {KEYS} from './keys';
 
 type Controller = InstanceType<any>;
 type RouterLib = (options?: any) => any;
@@ -44,31 +45,13 @@ export class Server {
     const routerLibrary = routerLib || Router;
     controllers.forEach((controller: Controller) => {
       if (controller) {
-        if (hasInjections(controller)) {
-          controller = this.resolveInjections(controller);
-        } else controller = new controller();
+        controller = this.get(`controller.${controller.name}`);
         const {basePath, router} = this.getRouter(routerLibrary, controller);
         if (basePath && router) {
           this.app.use(basePath, router);
         }
       }
     });
-  }
-
-  private resolveInjections(target: any) {
-    let injections = Reflect.getOwnMetadata(PARAMETER_KEY, target);
-    if (injections) {
-      injections = injections.map(injection => {
-        if (hasInjections(this.get(injection.bindKey))) {
-          return this.resolveInjections(this.get(injection.bindKey));
-        }
-
-        return this.get(injection.bindKey);
-      });
-      const instance = new target(...injections);
-      return instance;
-    }
-    return new target();
   }
 
   private getRouter(Router, controller: Controller): IRouterAndPath {
@@ -107,7 +90,20 @@ export class Server {
     };
   }
 
-  public repository(repo: Class<Repository<any>>, bindOption: string) {
-    Reflect.defineMetadata(bindOption, repo.prototype, Server.prototype);
+  public async repository<T>(repo: ObjectType<T>) {
+    const connection: Connection = this.get(KEYS.POSTGRES_KEY);
+    const repository = connection.getCustomRepository(repo);
+    this.bind(`repository.${repo.name}`).to(repository);
+  }
+
+  private _connectDB(config) {
+    return createConnection(config);
+  }
+
+  public async boot(dbConfig) {
+    const connection = await this._connectDB(dbConfig);
+    await connection.synchronize();
+    await connection.runMigrations();
+    this.bind(KEYS.POSTGRES_KEY).to(connection);
   }
 }
