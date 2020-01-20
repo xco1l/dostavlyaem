@@ -1,18 +1,21 @@
-import {EntityRepository, EntityManager, Repository} from 'typeorm';
+import {EntityRepository, AbstractRepository} from 'typeorm';
 import {User} from '../entities/User';
 
 @EntityRepository(User)
-export class UserRepository {
-  constructor(private manager: EntityManager) {}
-  createAndSave(userCreditionals: User): Promise<User> {
-    const user = new User();
-    user.email = userCreditionals.email;
-    user.password = userCreditionals.password;
-    user.userName = userCreditionals.userName;
-    return this.manager.save(user);
+export class UserRepository extends AbstractRepository<User> {
+  save(user: User): Promise<User> {
+    return this.repository.save(user);
   }
 
   findById(id: string) {
-    return this.manager.findOne(User, {id});
+    return this.repository.findOne(id);
+  }
+
+  deleteById(id: string) {
+    return this.repository.delete(id);
+  }
+
+  findAll() {
+    return this.repository.find();
   }
 }
