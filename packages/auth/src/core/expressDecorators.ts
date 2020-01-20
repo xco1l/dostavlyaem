@@ -10,6 +10,10 @@ export function Post(path?: string): MethodDecorator {
   return routesHelper('post', path);
 }
 
+export function Delete(path?: string): MethodDecorator {
+  return routesHelper('delete', path);
+}
+
 export function routesHelper(httpVerb: string, path?: string): MethodDecorator {
   return (
     target: any,
