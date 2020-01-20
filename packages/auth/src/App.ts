@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import {Server} from './core/Server';
 import pino, {Logger} from 'pino';
+import {BcryptHasher} from './services/hash.password';
 
 export class AuthService extends Server {
   private readonly START_MSG = 'App started on port: ';
@@ -21,6 +22,6 @@ export class AuthService extends Server {
   }
 
   private setUpBindings() {
-    //some bindings
+    this.bind('service.hasher').toClass(BcryptHasher);
   }
 }
