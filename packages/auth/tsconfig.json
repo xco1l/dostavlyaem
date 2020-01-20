@@ -1,8 +1,19 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "rootDir": "src",
-    "module": "ES6",
-    "strict": true,
+    "outDir": "dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "lib": ["es2018", "esnext.asynciterable"],
+    "module": "commonjs",
+    "target": "es2017",
+    "declaration": true,
+    "incremental": true,
     "esModuleInterop": true
-  }
+  },
+  "include": ["src"]
 }
