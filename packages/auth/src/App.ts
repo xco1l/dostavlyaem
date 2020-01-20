@@ -14,8 +14,8 @@ export class AuthService extends Server {
     this.pino = pino();
   }
 
-  public async start(port?: number) {
-    port = port || 3000;
+  public async start() {
+    const port = Number(process.env.APP_PORT) || 3000;
     this.app.listen(port, () => {
       this.pino.info(this.START_MSG + port);
     });
