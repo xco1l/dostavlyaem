@@ -1,6 +1,5 @@
 import 'reflect-metadata';
-import {container} from './IoC-container';
-type Controller = InstanceType<any>;
+import {container, Class} from './IoC-container';
 
 export function Get(path?: string): MethodDecorator {
   return routesHelper('get', path);
@@ -35,7 +34,7 @@ export function routesHelper(httpVerb: string, path?: string): MethodDecorator {
 }
 
 export function Controller(path: string): ClassDecorator {
-  return <TFunction extends Function>(target: TFunction) => {
+  return (target: any) => {
     Reflect.defineMetadata('BASE_PATH', '/' + path, target.prototype);
     container.bind(`controller.${target.name}`).toSingleton(target);
     return target;

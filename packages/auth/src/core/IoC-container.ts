@@ -3,10 +3,12 @@ import {Binding, BindingType} from './Binding';
 
 export const PARAMETER_KEY = 'injection:param';
 
-export type Constructor<T> = new (...args: any[]) => T;
+export type Class<T> = new (...args: any[]) => T;
+
+export type ObjectType<T> = {new (): T} | Function;
 
 export interface parameterInjection {
-  target: Constructor<any>;
+  target: Class<any>;
   index: number;
   bindKey: string;
 }
@@ -23,7 +25,7 @@ class DContainer {
     return instance;
   }
 
-  public get(key: string) {
+  public get<T>(key: string): T {
     const binding = this.instances.get(key);
     if (!binding) throw new Error(`No binding found for '${key}' key`);
     return this._resolve(binding);
@@ -40,17 +42,17 @@ class DContainer {
     }
   }
 
-  private _createInstanceFromCtor(binding: Binding) {
-    let instances: parameterInjection[] | [] = [];
+  private _createInstanceFromCtor<T>(binding: Binding) {
+    let instances: ObjectType<T>[] = [];
     if (hasInjections(binding.valueConstructor)) {
       instances = this._resolveInjectons(binding.valueConstructor);
     }
     return new binding.valueConstructor(...instances);
   }
 
-  private _resolveSingleton(binding: Binding) {
+  private _resolveSingleton<T>(binding: Binding): ObjectType<T> {
     if (!binding.instance) {
-      let instances: parameterInjection[] | [] = [];
+      let instances: ObjectType<T>[] = [];
       if (hasInjections(binding.valueConstructor)) {
         instances = this._resolveInjectons(binding.valueConstructor);
       }
@@ -60,14 +62,14 @@ class DContainer {
     return binding.instance;
   }
 
-  private _resolveInjectons(target: any): parameterInjection[] {
+  private _resolveInjectons<T>(target: Class<T>): ObjectType<T>[] {
     const injections: parameterInjection[] = Reflect.getOwnMetadata(
       PARAMETER_KEY,
       target,
     );
     const instances = injections
       .sort((a, b) => a.index - b.index)
-      .map(injection => this.get(injection.bindKey));
+      .map(injection => this.get<ObjectType<T>>(injection.bindKey));
     return instances;
   }
 }
@@ -75,7 +77,7 @@ class DContainer {
 export const container = new DContainer();
 
 export function inject(bindKey: string): ParameterDecorator {
-  return (target: any, _: string | symbol, index: number) => {
+  return <T>(target: Class<T>, _: string | symbol, index: number) => {
     const meta = Reflect.getOwnMetadata(PARAMETER_KEY, target);
     if (meta) {
       mergeOwnMeta(meta, [{bindKey, index, target}], target);
@@ -84,10 +86,14 @@ export function inject(bindKey: string): ParameterDecorator {
   };
 }
 
-function mergeOwnMeta(ownMeta: Array<any>, newMeta: Array<any>, target: any) {
+function mergeOwnMeta<T>(
+  ownMeta: parameterInjection[],
+  newMeta: parameterInjection[],
+  target: Class<T>,
+) {
   Reflect.defineMetadata(PARAMETER_KEY, ownMeta.concat(newMeta), target);
 }
 
-export function hasInjections(target: any): boolean {
+export function hasInjections<T>(target: Class<T>): boolean {
   return !!Reflect.getOwnMetadata(PARAMETER_KEY, target);
 }
