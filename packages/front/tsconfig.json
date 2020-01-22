@@ -16,7 +16,7 @@
     "jsx": "react",
     "baseUrl": "src",
     "paths": {
-      "@/main/*": ["../../main/src/*"]
+      "@/db/*": ["../../database/src/*"]
     },
     "experimentalDecorators": true
   },

@@ -1,19 +1,19 @@
 import {inject} from '../core/IoC-container';
 import {Controller, Get, Post, Delete} from '../core/expressDecorators';
 import {Request, Response} from 'express';
-import {UserRepository} from '../repositories';
+import {UserRepository} from '@/db/repositories';
 import {BcryptHasher} from '../services/hash.password';
-import {User} from '../entities/User';
+import {User} from '@/db/entities';
 
 @Controller('users')
 export class UserController {
   constructor(
-    @inject('repository.UserRepository') protected userRepo: UserRepository,
+    @inject('repositories.UserRepository') protected userRepo: UserRepository,
     @inject('service.hasher') protected hasher: BcryptHasher,
   ) {}
 
   @Get('all')
-  protected async getAllUsers(req: Request, res: Response) {
+  async getAllUsers(req: Request, res: Response) {
     try {
       const users = await this.userRepo.findAll();
       return res.json(users);
@@ -24,7 +24,7 @@ export class UserController {
   }
 
   @Post()
-  protected async createUser(req: Request, res: Response) {
+  async createUser(req: Request, res: Response) {
     try {
       const userCreditionals: Omit<User, 'id'> = req.body;
       let savedUser = await this.userRepo.save({
@@ -34,20 +34,23 @@ export class UserController {
       savedUser.password = await this.hasher.createHash(savedUser.password);
       savedUser.confirmHash = await this.hasher.createHash(savedUser.id);
       savedUser = await this.userRepo.save(savedUser);
-      return res
+
+      res
         .status(200)
         .send(
           `User '${
             savedUser.userName
           }' successfully created'. Creditionals: ${JSON.stringify(savedUser)}`,
         );
+
+      return savedUser;
     } catch (err) {
       throw new Error(err);
     }
   }
 
   @Delete(':id')
-  protected async deleteById(req: Request, res: Response) {
+  async deleteById(req: Request, res: Response) {
     const id = req.params.id;
     const user = await this.userRepo.findById(id);
     if (!user) {
@@ -67,8 +70,14 @@ export class UserController {
   }
 
   @Get(':id')
-  protected async getById(req: Request, res: Response) {
+  async getById(req: Request, res: Response) {
     const user = await this.userRepo.findById(req.params.id);
-    return res.status(200).send(`Hello ${user.userName}`);
+    if (!user) return res.status(404).json({message: 'Not found', user: null});
+    return res.status(200).json({message: 'Success', user});
   }
+}
+
+export interface responseGetUserI {
+  message: string;
+  user: User | null;
 }

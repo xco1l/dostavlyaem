@@ -4,17 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "dotenv ts-node -r tsconfig-paths/register ./src",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
+    "start": "ts-node -r dotenv/config -r tsconfig-paths/register .",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "test:unit": "jest --forceExit --coverage --verbose --passWithNoTests --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.2",
-    "@types/jsonwebtoken": "^8.3.5",
-    "@types/node": "^13.1.0",
-    "@types/pino": "^5.15.3",
     "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
@@ -28,7 +25,21 @@
     "uuidv4": "^6.0.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.2",
+    "@types/jest": "^24.9.0",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/node": "^13.1.0",
+    "@types/pino": "^5.15.3",
     "dotenv": "^8.2.0",
+    "install": "^0.13.0",
+    "jest": "^25.1.0",
+    "jest-create-mock-instance": "^1.1.0",
+    "mock-express-request": "^0.2.2",
+    "mock-express-response": "^0.2.2",
+    "npm": "^6.13.6",
+    "source-map-support": "^0.5.16",
+    "ts-jest": "^24.3.0",
     "tsconfig-paths": "^3.9.0"
   }
 }

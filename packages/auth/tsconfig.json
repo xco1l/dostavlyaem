@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "rootDir": "src",
     "outDir": "dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "lib": ["es2018", "esnext.asynciterable"],
+    "lib": ["es2018", "esnext"],
     "module": "commonjs",
     "target": "es2017",
     "declaration": true,
     "incremental": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@/db/*": ["../../database/src/*"]
+    }
   },
   "include": ["src"]
 }

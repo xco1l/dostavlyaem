@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import {Class} from './IoC-container';
 
 export enum BindingType {
   CLASS = 'CLASS',
@@ -8,31 +9,31 @@ export enum BindingType {
 
 export class Binding {
   public readonly key: string;
-  public type?: string;
-  public valueConstructor;
+  public type: BindingType;
+  public valueConstructor: Class<any>;
   public instance: any;
 
   constructor(key: string) {
     this.key = key;
   }
 
-  static bind(key) {
+  static bind(key: string) {
     return new Binding(key);
   }
 
-  toClass(ctor): this {
+  toClass<T>(ctor: Class<T>): this {
     this.type = BindingType.CLASS;
     this.valueConstructor = ctor;
     return this;
   }
 
-  toSingleton(ctor): this {
+  toSingleton<T>(ctor: Class<T>): this {
     this.type = BindingType.SINGLETON;
     this.valueConstructor = ctor;
     return this;
   }
 
-  to(value) {
+  to<T>(value: T): this {
     this.type = BindingType.INSTANCE;
     this.instance = value;
     return this;
