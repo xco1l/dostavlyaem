@@ -1,22 +1,14 @@
 import 'reflect-metadata';
-import express, {
+import {
   Application,
   Request,
   Response,
   NextFunction,
   Router,
+  RouterOptions,
+  default as express,
 } from 'express';
-import {createConnection, Connection, ObjectType} from 'typeorm';
-import {container} from './IoC-container';
-import {KEYS} from './keys';
-
-type Controller = InstanceType<any>;
-type RouterLib = (options?: any) => any;
-
-interface Class<T> {
-  new (...args): T;
-  [key: string]: any;
-}
+import {container, Class} from './IoC-container';
 
 interface IRouterAndPath {
   basePath: string | null;
@@ -27,7 +19,7 @@ export class Server {
   private readonly _app: Application;
 
   private container = container;
-  protected bind = this.container.bind;
+  public bind = this.container.bind;
   private get = this.container.get;
 
   constructor() {
@@ -38,15 +30,11 @@ export class Server {
     return this._app;
   }
 
-  public addControllers(
-    controllers: Controller[],
-    routerLib?: RouterLib,
-  ): void {
-    const routerLibrary = routerLib || Router;
-    controllers.forEach((controller: Controller) => {
+  public addControllers(controllers: Class<any>[]): void {
+    controllers.forEach(<T>(controller: Class<T>) => {
       if (controller) {
         controller = this.get(`controller.${controller.name}`);
-        const {basePath, router} = this.getRouter(routerLibrary, controller);
+        const {basePath, router} = this.getRouter(Router, controller);
         if (basePath && router) {
           this.app.use(basePath, router);
         }
@@ -54,11 +42,10 @@ export class Server {
     });
   }
 
-  private getRouter(Router, controller: Controller): IRouterAndPath {
+  private getRouter<T>(Router, controller: Class<T>): IRouterAndPath {
     const prototype = Reflect.getPrototypeOf(controller);
-    const options = Reflect.getOwnMetadata('OPTIONS', prototype);
-
-    let router: any;
+    const options: RouterOptions = Reflect.getOwnMetadata('OPTIONS', prototype);
+    let router: Router;
     if (options) router = Router(options);
     else router = Router();
 
@@ -88,22 +75,5 @@ export class Server {
       basePath,
       router,
     };
-  }
-
-  public async repository<T>(repo: ObjectType<T>) {
-    const connection: Connection = this.get(KEYS.POSTGRES_KEY);
-    const repository = connection.getCustomRepository(repo);
-    this.bind(`repository.${repo.name}`).to(repository);
-  }
-
-  private _connectDB(config) {
-    return createConnection(config);
-  }
-
-  public async boot(dbConfig) {
-    const connection = await this._connectDB(dbConfig);
-    await connection.synchronize();
-    await connection.runMigrations();
-    this.bind(KEYS.POSTGRES_KEY).to(connection);
   }
 }
