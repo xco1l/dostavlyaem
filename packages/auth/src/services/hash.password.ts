@@ -2,17 +2,17 @@ import {hash as bcryptHash, compare as BcryptCompare} from 'bcrypt';
 
 const BCRYPT_ROUNDS: number = 10;
 
-export interface PasswordHasher<T = string> {
-  createHash(password: T): Promise<T>;
-  comparePassword(providedPass: T, storedPass: T): Promise<boolean>;
+export interface PasswordHasher {
+  createHash(password: string): Promise<string>;
+  compareHashes(providedPass: string, storedPass: string): Promise<boolean>;
 }
 
-export class BcryptHasher implements PasswordHasher<string> {
+export class BcryptHasher implements PasswordHasher {
   async createHash(password: string): Promise<string> {
     return bcryptHash(password, BCRYPT_ROUNDS);
   }
 
-  async comparePassword(
+  async compareHashes(
     providedPass: string,
     storedPass: string,
   ): Promise<boolean> {
