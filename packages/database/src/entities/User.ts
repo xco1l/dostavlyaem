@@ -1,10 +1,10 @@
-import {Column, PrimaryGeneratedColumn, BeforeInsert} from 'typeorm';
-import {Entity} from 'typeorm';
+import {Column, PrimaryGeneratedColumn, Entity, OneToMany} from 'typeorm';
+import {Order} from './Order';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column()
   email: string;
@@ -23,4 +23,10 @@ export class User {
 
   @Column({nullable: false, default: ''})
   confirmHash?: string;
+
+  @OneToMany(
+    type => Order,
+    order => order.user,
+  )
+  orders?: Order[];
 }
