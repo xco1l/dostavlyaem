@@ -54,7 +54,7 @@
     "@types/bcrypt": "^3.0.0",
     "bcrypt": "^3.0.7",
     "jest-create-mock-instance": "^1.1.0",
-    "loopback-connector-postgresql": "^3.8.0"
+    "loopback-connector-postgresql": "^5.5.1"
   },
   "devDependencies": {
     "@loopback/build": "^2.1.0",
