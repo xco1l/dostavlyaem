@@ -29,6 +29,6 @@
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.10.1"
   }
 }
